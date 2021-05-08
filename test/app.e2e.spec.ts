@@ -6,6 +6,11 @@ import { AppModule } from '../src/app.module';
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
+  beforeEach(() => {
+    jest.useFakeTimers('modern');
+    jest.setSystemTime(new Date('2021/05/03'));
+  });
+
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -60,7 +65,7 @@ describe('AppController (e2e)', () => {
         {
           groupedEmployees(groupedEmployeeInput: {
             minLeftBenefits: 0,
-            pastMonth: 1
+            monthAgo: 0
           }) {
             id,
             name,
@@ -92,7 +97,7 @@ describe('AppController (e2e)', () => {
         {
           groupedEmployees(groupedEmployeeInput: {
             minLeftBenefits: 0,
-            pastMonth: 0
+            monthAgo: -1
           }) {
             id,
           }

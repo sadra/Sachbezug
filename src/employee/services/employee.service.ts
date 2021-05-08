@@ -4,6 +4,7 @@ import { orders } from './../../db/orders.mock';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { employees } from '../../db/employees.mock';
 import { Employee } from '../models/employee.model';
+import * as moment from 'moment';
 
 @Injectable()
 export class EmployeeService {
@@ -20,19 +21,29 @@ export class EmployeeService {
   async groupedEmployeeBy(
     groupedEmployeeInput: GroupedEmployeeInput,
   ): Promise<Employee[][]> {
-    const { minLeftBenefits, pastMonth } = groupedEmployeeInput;
-
-    const pasMonths = pastMonth * 30 * 24 * 60 * 60 * 1000;
+    const { minLeftBenefits, monthAgo } = groupedEmployeeInput;
     const spends = {};
 
     orders.forEach((o) => {
-      if (o.orderDate.getTime() < new Date().getTime() - pasMonths) {
+      if (
+        moment(new Date())
+          .clone()
+          .startOf('month')
+          .subtract(monthAgo, 'months')
+          .isAfter(moment(o.orderDate)) ||
+        moment(new Date())
+          .clone()
+          .endOf('month')
+          .subtract(monthAgo, 'months')
+          .isBefore(moment(o.orderDate))
+      )
         return;
-      }
+
       const { voucherAmount } = vouchers.find(
         (v) => v.voucherId === o.voucherId,
       );
       if (!voucherAmount) return;
+
       spends[o.employeeId] = (spends[o.employeeId] || 0) + voucherAmount;
     });
 

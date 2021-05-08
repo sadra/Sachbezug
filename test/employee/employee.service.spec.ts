@@ -38,7 +38,7 @@ describe('Employee Service', () => {
     const goupedByEmpoyees: Employee[][] = await employeeSerivce.groupedEmployeeBy(
       {
         minLeftBenefits: 10,
-        pastMonth: 1,
+        monthAgo: 0,
       },
     );
 
