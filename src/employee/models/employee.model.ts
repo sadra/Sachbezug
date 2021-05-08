@@ -16,4 +16,7 @@ export class Employee {
 
   @Field()
   companyName: string;
+
+  @Field((type) => Int, { nullable: true })
+  spends?: number;
 }
