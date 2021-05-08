@@ -5,12 +5,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 @Injectable()
 export class VoucherService {
   async findOneById(id: number): Promise<Voucher> {
-    const employee = vouchers.find((e) => e.voucherId === id);
+    const voucher = vouchers.find((e) => e.voucherId === id);
 
-    if (!employee) {
+    if (!voucher) {
       throw new NotFoundException(`Not found voucher by ${id} ID`);
     }
 
-    return employee;
+    return voucher;
   }
 }
