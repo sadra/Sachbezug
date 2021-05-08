@@ -12,10 +12,10 @@ export class GroupedEmployeeInput {
   minLeftBenefits?: number;
 
   @Field((type) => Int, {
-    description: `In last N pas month. (Minimum value is 1)`,
+    description: `In N month ago. (Minimum value is 0)`,
     nullable: true,
-    defaultValue: 1,
+    defaultValue: 0,
   })
-  @Min(1)
-  pastMonth?: number;
+  @Min(0)
+  monthAgo?: number;
 }

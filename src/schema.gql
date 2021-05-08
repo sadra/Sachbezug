@@ -50,6 +50,6 @@ input GroupedEmployeeInput {
   """Amount of benefits left. (Minimum value is 0)"""
   minLeftBenefits: Int = 10
 
-  """In last N pas month. (Minimum value is 1)"""
-  pastMonth: Int = 1
+  """In N month ago. (Minimum value is 0)"""
+  monthAgo: Int = 0
 }
