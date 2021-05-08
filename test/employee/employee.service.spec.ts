@@ -35,7 +35,10 @@ describe('Employee Service', () => {
 
   it('should return gouped by company of employees', async () => {
     const goupedByEmpoyees: Employee[][] = await employeeSerivce.groupedEmployeeBy(
-      10,
+      {
+        minLeftBenefits: 10,
+        pastMonth: 1,
+      },
     );
 
     expect(goupedByEmpoyees).toEqual(

@@ -1,3 +1,4 @@
+import { GroupedEmployeeInput } from './../inputs/groupedEmployee.input';
 import { vouchers } from './../../db/vouchers.mock';
 import { orders } from './../../db/orders.mock';
 import { Injectable, NotFoundException } from '@nestjs/common';
@@ -16,8 +17,12 @@ export class EmployeeService {
     return employee;
   }
 
-  async groupedEmployeeBy(minLeftBenefits: number): Promise<Employee[][]> {
-    const pasMonths = 1 * 30 * 24 * 60 * 60 * 1000;
+  async groupedEmployeeBy(
+    groupedEmployeeInput: GroupedEmployeeInput,
+  ): Promise<Employee[][]> {
+    const { minLeftBenefits, pastMonth } = groupedEmployeeInput;
+
+    const pasMonths = pastMonth * 30 * 24 * 60 * 60 * 1000;
     const spends = {};
 
     orders.forEach((o) => {
