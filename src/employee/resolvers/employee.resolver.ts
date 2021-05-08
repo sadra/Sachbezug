@@ -36,6 +36,11 @@ export class EmployeeResolver {
     return this.employeeService.groupedEmployeeBy(groupedEmployeeInput);
   }
 
+  @Query((returns) => [Employee])
+  async employeesOf(@Args('companyId', { type: () => Int }) companyId: number) {
+    return this.employeeService.employeesOf(companyId);
+  }
+
   @ResolveField()
   async spends(@Parent() employee: Employee) {
     const { id } = employee;
