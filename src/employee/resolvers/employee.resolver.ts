@@ -10,4 +10,11 @@ export class EmployeeResolver {
   async employee(@Args('id', { type: () => Int }) id: number) {
     return this.employeeService.findOneById(id);
   }
+
+  @Query((returns) => [[Employee]])
+  async groupedEmployees(
+    @Args('minLeftBenefits', { type: () => Int }) minLeftBenefits: number,
+  ) {
+    return this.employeeService.groupedEmployeeBy(minLeftBenefits);
+  }
 }

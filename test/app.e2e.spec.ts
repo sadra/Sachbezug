@@ -51,4 +51,33 @@ describe('AppController (e2e)', () => {
         expect(body.data.order).toEqual({ orderId: 1 });
       });
   });
+
+  it('/graphql (GET) groupedEmployees', () => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `
+      {
+        groupedEmployees(minLeftBenefits: 10) {
+          id,
+          name,
+          monthlyBudget
+        }
+      }`,
+      })
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body.data.groupedEmployees).toEqual(
+          expect.arrayContaining([
+            expect.arrayContaining([
+              expect.objectContaining({
+                id: expect.any(Number),
+                name: expect.any(String),
+                monthlyBudget: expect.any(Number),
+              }),
+            ]),
+          ]),
+        );
+      });
+  });
 });
