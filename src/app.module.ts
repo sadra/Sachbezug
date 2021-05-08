@@ -5,6 +5,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { EmployeeModule } from './employee/employee.module';
 import { join } from 'path';
 import { VoucherModule } from './voucher/voucher.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { VoucherModule } from './voucher/voucher.module';
     }),
     EmployeeModule,
     VoucherModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],
