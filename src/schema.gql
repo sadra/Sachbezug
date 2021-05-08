@@ -1,0 +1,55 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Order {
+  orderId: Int!
+  orderDate: Date!
+  employeeId: Int!
+  voucherId: Int!
+}
+
+"""Date custom scalar type"""
+scalar Date
+
+type Employee {
+  id: Int!
+  name: String!
+  monthlyBudget: Int!
+  companyId: Int!
+  companyName: String!
+  spends: Int
+  tax: Float
+}
+
+type Voucher {
+  voucherId: Int!
+  voucherAmount: Int!
+  partnerId: Int!
+  partnerName: String!
+  orders: [Order!]
+}
+
+type Partner {
+  partnerId: Int!
+  partnerName: String!
+  vouchers: [Voucher!]!
+  revenue: Int!
+}
+
+type Query {
+  employee(id: Int!): Employee!
+  groupedEmployees(groupedEmployeeInput: GroupedEmployeeInput!): [[Employee!]!]!
+  employeesOf(companyId: Int!): [Employee!]!
+  order(id: Int!): Order!
+  voucher(id: Int!): Voucher!
+  partners: [Partner!]!
+}
+
+input GroupedEmployeeInput {
+  """Amount of benefits left. (Minimum value is 0)"""
+  minLeftBenefits: Int = 10
+
+  """In last N pas month. (Minimum value is 1)"""
+  pastMonth: Int = 1
+}
