@@ -29,6 +29,20 @@ export class OrderService {
     return tax;
   }
 
+  async ordersOfVoucher(voucherId: number): Promise<Order[]> {
+    return orders.filter((o) => o.voucherId === voucherId);
+  }
+
+  async revenueOfVoucher(voucherId: number): Promise<number> {
+    return orders
+      .filter((o) => o.voucherId === voucherId)
+      .reduce(
+        (acc, { voucherId }) =>
+          acc + vouchers.find((v) => v.voucherId === voucherId).voucherAmount,
+        0,
+      );
+  }
+
   private calcSachbezug(tax: number, spends: number) {
     if (spends > 44) {
       tax = (spends - 44) * 0.3;

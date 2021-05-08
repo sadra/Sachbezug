@@ -150,4 +150,50 @@ describe('AppController (e2e)', () => {
         );
       });
   });
+
+  it('/graphql (GET) partners', () => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `
+        {
+          partners{
+            partnerId,
+            partnerName,
+            revenue,
+            vouchers {
+              voucherId,
+              orders {
+                orderId,
+                employeeId
+              }
+            }
+          }
+        }
+      `,
+      })
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body.data.partners).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              partnerId: expect.any(Number),
+              partnerName: expect.any(String),
+              revenue: expect.any(Number),
+              vouchers: expect.arrayContaining([
+                expect.objectContaining({
+                  voucherId: expect.any(Number),
+                  orders: expect.arrayContaining([
+                    expect.objectContaining({
+                      orderId: expect.any(Number),
+                      employeeId: expect.any(Number),
+                    }),
+                  ]),
+                }),
+              ]),
+            }),
+          ]),
+        );
+      });
+  });
 });

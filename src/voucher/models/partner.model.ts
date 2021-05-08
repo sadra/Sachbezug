@@ -1,20 +1,18 @@
 import { Order } from './../../order/models/order.model';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Voucher } from './voucher.model';
 
 @ObjectType()
-export class Voucher {
-  @Field((type) => Int)
-  voucherId: number;
-
-  @Field((type) => Int)
-  voucherAmount: number;
-
+export class Partner {
   @Field((type) => Int)
   partnerId: number;
 
   @Field()
   partnerName: string;
 
-  @Field((type) => [Order], { nullable: true })
-  orders?: Order[];
+  @Field((type) => [Voucher])
+  vouchers: Voucher[];
+
+  @Field((type) => Int)
+  revenue: number;
 }

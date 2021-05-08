@@ -43,4 +43,9 @@ describe('Order Service', () => {
     const tax: number = await orderService.totalTax(10);
     expect(tax).not.toEqual(0);
   });
+
+  it('should return correct revenue amount for voucher', async () => {
+    const revenue: number = await orderService.revenueOfVoucher(1);
+    expect(revenue).not.toEqual(0);
+  });
 });
