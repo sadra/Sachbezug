@@ -52,4 +52,8 @@ export class EmployeeService {
 
     return list;
   }
+
+  async employeesOf(companyId: any): Promise<Employee[]> {
+    return employees.filter((e) => e.companyId === companyId);
+  }
 }

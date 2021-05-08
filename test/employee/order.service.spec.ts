@@ -6,6 +6,8 @@ describe('Order Service', () => {
   let orderService: OrderService;
   beforeEach(() => {
     orderService = new OrderService();
+    jest.useFakeTimers('modern');
+    jest.setSystemTime(new Date('2021/05/03'));
   });
 
   it('should return correct model resource if the order is exists', async () => {
@@ -30,5 +32,15 @@ describe('Order Service', () => {
         expect(error).toBeInstanceOf(NotFoundException);
         done();
       });
+  });
+
+  it('should return correct spends amount', async () => {
+    const spends: number = await orderService.totalSpends(1);
+    expect(spends).not.toEqual(0);
+  });
+
+  it('should return correct tax amount', async () => {
+    const tax: number = await orderService.totalTax(10);
+    expect(tax).not.toEqual(0);
   });
 });

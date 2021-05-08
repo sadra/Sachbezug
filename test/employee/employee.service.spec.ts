@@ -8,9 +8,10 @@ describe('Employee Service', () => {
     employeeSerivce = new EmployeeService();
   });
 
-  it('should return correct employee resource if the user is exists', async () => {
-    const user: Employee = await employeeSerivce.findOneById(1);
-    expect(user).toEqual(
+  it('should return correct employee resource if the employee is exists', async () => {
+    const employee: Employee = await employeeSerivce.findOneById(1);
+
+    expect(employee).toEqual(
       expect.objectContaining({
         id: expect.any(Number),
         name: expect.any(String),
@@ -21,7 +22,7 @@ describe('Employee Service', () => {
     );
   });
 
-  it('should throw NotFoundException if user is no exists', (done) => {
+  it('should throw NotFoundException if employee is no exists', (done) => {
     employeeSerivce
       .findOneById(-1)
       .then((response) => {
@@ -52,6 +53,22 @@ describe('Employee Service', () => {
             companyName: expect.any(String),
           }),
         ]),
+      ]),
+    );
+  });
+
+  it('should return list of employees of a company', async () => {
+    const employees: Employee[] = await employeeSerivce.employeesOf(1);
+
+    expect(employees).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: expect.any(Number),
+          name: expect.any(String),
+          monthlyBudget: expect.any(Number),
+          companyId: expect.any(Number),
+          companyName: expect.any(String),
+        }),
       ]),
     );
   });

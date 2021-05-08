@@ -116,4 +116,38 @@ describe('AppController (e2e)', () => {
         );
       });
   });
+
+  it('/graphql (GET) employeesOf', () => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `
+      {
+        employeesOf(companyId: 1){
+          id,
+          name,
+          monthlyBudget,
+          spends,
+          tax,
+          companyName
+        }
+      }
+      `,
+      })
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body.data.employeesOf).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              id: expect.any(Number),
+              name: expect.any(String),
+              monthlyBudget: expect.any(Number),
+              spends: expect.any(Number),
+              tax: expect.any(Number),
+              companyName: expect.any(String),
+            }),
+          ]),
+        );
+      });
+  });
 });
