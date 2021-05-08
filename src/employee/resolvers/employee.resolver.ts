@@ -44,6 +44,12 @@ export class EmployeeResolver {
   @ResolveField()
   async spends(@Parent() employee: Employee) {
     const { id } = employee;
-    return this.orderService.totalSpends({ employeeId: id });
+    return this.orderService.totalSpends(id);
+  }
+
+  @ResolveField()
+  async tax(@Parent() employee: Employee) {
+    const { id } = employee;
+    return this.orderService.totalTax(id);
   }
 }

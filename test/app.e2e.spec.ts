@@ -128,6 +128,7 @@ describe('AppController (e2e)', () => {
           name,
           monthlyBudget,
           spends,
+          tax,
           companyName
         }
       }
@@ -142,6 +143,7 @@ describe('AppController (e2e)', () => {
               name: expect.any(String),
               monthlyBudget: expect.any(Number),
               spends: expect.any(Number),
+              tax: expect.any(Number),
               companyName: expect.any(String),
             }),
           ]),
