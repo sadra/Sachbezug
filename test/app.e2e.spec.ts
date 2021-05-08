@@ -21,4 +21,14 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect('Hello World!');
   });
+
+  it('/graphql (GET) employee', () => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({ query: '{employee(id:1) { id }}' })
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body.data.employee).toEqual({ id: 1 });
+      });
+  });
 });
