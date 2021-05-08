@@ -16,12 +16,33 @@ export class OrderService {
     return order;
   }
 
-  async totalSpends(input: { employeeId: number }): Promise<number> {
-    const total = orders
+  async totalSpends(employeeId: number): Promise<number> {
+    return this.getTotalSpends(employeeId);
+  }
+
+  async totalTax(employeeId: number): Promise<number> {
+    const spends = this.getTotalSpends(employeeId);
+    let tax = 0;
+
+    tax = this.calcSachbezug(tax, spends);
+
+    return tax;
+  }
+
+  private calcSachbezug(tax: number, spends: number) {
+    if (spends > 44) {
+      tax = (spends - 44) * 0.3;
+      tax = Math.round((tax + Number.EPSILON) * 1000) / 1000;
+    }
+    return tax;
+  }
+
+  private getTotalSpends(employeeId: number) {
+    return orders
       .filter(
-        ({ employeeId, orderDate }) =>
-          employeeId === input.employeeId &&
-          moment(orderDate).isSameOrAfter(
+        (o) =>
+          o.employeeId === employeeId &&
+          moment(o.orderDate).isSameOrAfter(
             moment(new Date()).clone().startOf('month'),
           ),
       )
@@ -30,7 +51,5 @@ export class OrderService {
           acc + vouchers.find((v) => v.voucherId === voucherId).voucherAmount,
         0,
       );
-
-    return total;
   }
 }
