@@ -1,3 +1,4 @@
+import { Order } from './../../order/models/order.model';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
@@ -13,4 +14,7 @@ export class Voucher {
 
   @Field()
   partnerName: string;
+
+  @Field((type) => [Order], { nullable: true })
+  orders?: Order[];
 }
