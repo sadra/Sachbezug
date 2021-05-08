@@ -1,11 +1,13 @@
+import { Partner } from './../../src/voucher/models/partner.model';
 import { Voucher } from './../../src/voucher/models/voucher.model';
 import { VoucherService } from './../../src/voucher/services/voucher.service';
 import { NotFoundException } from '@nestjs/common';
+import { OrderService } from '../../src/order/service/order.service';
 
 describe('Voucher Service', () => {
   let voucherService: VoucherService;
   beforeEach(() => {
-    voucherService = new VoucherService();
+    voucherService = new VoucherService(new OrderService());
   });
 
   it('should return correct voucher resource if the voucher is exists', async () => {
@@ -30,5 +32,24 @@ describe('Voucher Service', () => {
         expect(error).toBeInstanceOf(NotFoundException);
         done();
       });
+  });
+
+  it('should return array of partners', async () => {
+    const partners: Partner[] = await voucherService.partners();
+
+    expect(partners).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          partnerId: expect.any(Number),
+          partnerName: expect.any(String),
+          revenue: expect.any(Number),
+          vouchers: expect.arrayContaining([
+            expect.objectContaining({
+              voucherId: expect.any(Number),
+            }),
+          ]),
+        }),
+      ]),
+    );
   });
 });
