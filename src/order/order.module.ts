@@ -5,5 +5,6 @@ import { DateScalar } from './scalars/date.scalar';
 
 @Module({
   providers: [OrderResolver, OrderService, DateScalar],
+  exports: [OrderService],
 })
 export class OrderModule {}
