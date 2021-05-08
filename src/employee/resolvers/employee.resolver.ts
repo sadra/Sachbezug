@@ -1,4 +1,6 @@
+import { ValidationPipe } from '@nestjs/common';
 import { Args, Int, Query, Resolver } from '@nestjs/graphql';
+import { GroupedEmployeeInput } from '../inputs/groupedEmployee.input';
 import { Employee } from '../models/employee.model';
 import { EmployeeService } from '../services/employee.service';
 
@@ -13,8 +15,13 @@ export class EmployeeResolver {
 
   @Query((returns) => [[Employee]])
   async groupedEmployees(
-    @Args('minLeftBenefits', { type: () => Int }) minLeftBenefits: number,
+    @Args(
+      'groupedEmployeeInput',
+      { type: () => GroupedEmployeeInput },
+      new ValidationPipe(),
+    )
+    groupedEmployeeInput: GroupedEmployeeInput,
   ) {
-    return this.employeeService.groupedEmployeeBy(minLeftBenefits);
+    return this.employeeService.groupedEmployeeBy(groupedEmployeeInput);
   }
 }

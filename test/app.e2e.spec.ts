@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 
@@ -57,13 +57,16 @@ describe('AppController (e2e)', () => {
       .post('/graphql')
       .send({
         query: `
-      {
-        groupedEmployees(minLeftBenefits: 10) {
-          id,
-          name,
-          monthlyBudget
-        }
-      }`,
+        {
+          groupedEmployees(groupedEmployeeInput: {
+            minLeftBenefits: 0,
+            pastMonth: 1
+          }) {
+            id,
+            name,
+            monthlyBudget,
+          }
+        }`,
       })
       .expect(200)
       .expect(({ body }) => {
@@ -76,6 +79,39 @@ describe('AppController (e2e)', () => {
                 monthlyBudget: expect.any(Number),
               }),
             ]),
+          ]),
+        );
+      });
+  });
+
+  it('should throw 400 exception if parameters for not passed correct at /graphql (GET) groupedEmployees', () => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `
+        {
+          groupedEmployees(groupedEmployeeInput: {
+            minLeftBenefits: 0,
+            pastMonth: 0
+          }) {
+            id,
+          }
+        }`,
+      })
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body.errors).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              message: 'Bad Request Exception',
+              extensions: expect.objectContaining({
+                exception: expect.objectContaining({
+                  response: expect.objectContaining({
+                    statusCode: 400,
+                  }),
+                }),
+              }),
+            }),
           ]),
         );
       });
