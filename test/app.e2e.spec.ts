@@ -31,4 +31,14 @@ describe('AppController (e2e)', () => {
         expect(body.data.employee).toEqual({ id: 1 });
       });
   });
+
+  it('/graphql (GET) voucher', () => {
+    return request(app.getHttpServer())
+      .post('/graphql')
+      .send({ query: '{voucher(id:1) { voucherId }}' })
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body.data.voucher).toEqual({ voucherId: 1 });
+      });
+  });
 });
