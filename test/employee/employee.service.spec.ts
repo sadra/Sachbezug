@@ -32,4 +32,27 @@ describe('Employee Service', () => {
         done();
       });
   });
+
+  it('should return gouped by company of employees', async () => {
+    const goupedByEmpoyees: Employee[][] = await employeeSerivce.groupedEmployeeBy(
+      {
+        minLeftBenefits: 10,
+        pastMonth: 1,
+      },
+    );
+
+    expect(goupedByEmpoyees).toEqual(
+      expect.arrayContaining([
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: expect.any(Number),
+            name: expect.any(String),
+            monthlyBudget: expect.any(Number),
+            companyId: expect.any(Number),
+            companyName: expect.any(String),
+          }),
+        ]),
+      ]),
+    );
+  });
 });
